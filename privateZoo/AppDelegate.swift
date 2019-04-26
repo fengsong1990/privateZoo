@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Kingfisher
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,9 +16,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        SystemConfigOperation()
+        
+        
+        let _mainVC = MainVC()
+        self.window?.rootViewController = _mainVC
+        
         return true
     }
 
+    
+   @objc func SystemConfigOperation(){
+    
+    FS_SQLiteManager.shareManager.createTable()
+    FS_AssetManager.share.selectPhotoArray = FS_SQLiteManager.shareManager.getData()
+    
+    //ImageCache.default.maxCachePeriodInSecond = TimeInterval(60 * 60 * 24 * 7)
+    
+    
+//        ImageCache.default.maxCachePeriodInSecond = TimeInterval(60 * 60 * 24 * 365)
+//        Database.sharedInstance.openDatabase()
+//        let bundlePath = Bundle.main.path(forResource: "web", ofType: "zip")
+//        do{
+//            try FileManager.default.copyItem(atPath: bundlePath!, toPath: ConfigTool.shareInstance.tempZipPath())
+//        }catch{
+//            printLog(message: "\(error.localizedDescription)")
+//        }
+//        ConfigTool.shareInstance.unZipFile()
+//        ConfigTool.shareInstance.createFileDir(path: ConfigTool.shareInstance.myTempFilePath())
+//        let bbb = ConfigTool.shareInstance.myTempFilePath()
+//        printLog(message: "bbb==\(bbb)")
+        //Helper.shareInstance().ftpCurrentFolderName = "Images"
+    }
+    
+    
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -41,6 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        
+        ImageCache.default.clearMemoryCache()
+    }
 }
 
